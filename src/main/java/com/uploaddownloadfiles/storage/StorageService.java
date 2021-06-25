@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,5 +54,16 @@ public class StorageService {
                 .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
                 .headers(httpHeaders)
                 .body(resource);
+    }
+
+    public List<String> loadFiles() throws FileNotFoundException {
+        List<String> filenames = new ArrayList<>();
+        Path fileStorage = get(DEFAULT_LOCATION).toAbsolutePath().normalize();
+        File[] dir = fileStorage.toFile().listFiles();
+        if(dir == null) return filenames;
+        for(File file: dir) {
+            filenames.add(file.getName());
+        }
+        return filenames;
     }
 }
