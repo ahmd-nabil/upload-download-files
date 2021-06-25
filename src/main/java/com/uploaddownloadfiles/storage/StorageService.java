@@ -1,5 +1,6 @@
 package com.uploaddownloadfiles.storage;
 
+import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -51,7 +52,8 @@ public class StorageService {
         httpHeaders.add("File-Name", filename);
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name="+ resource.getFilename());
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
+//                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
+                .contentType(MediaType.valueOf(new Tika().detect(path)))
                 .headers(httpHeaders)
                 .body(resource);
     }
