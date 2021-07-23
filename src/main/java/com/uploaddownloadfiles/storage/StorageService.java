@@ -49,8 +49,7 @@ public class StorageService {
         }
         Resource resource = new UrlResource(path.toUri());
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("File-Name", filename);
-        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name="+ resource.getFilename());
+        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ filename);
         return ResponseEntity.ok()
 //                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
                 .contentType(MediaType.valueOf(new Tika().detect(path)))
@@ -58,6 +57,7 @@ public class StorageService {
                 .body(resource);
     }
 
+    // load all filenames from file server
     public List<String> loadFiles() throws FileNotFoundException {
         List<String> filenames = new ArrayList<>();
         Path fileStorage = get(DEFAULT_LOCATION).toAbsolutePath().normalize();
